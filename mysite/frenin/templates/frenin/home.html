@@ -1,4 +1,15 @@
-<li><a href="/frenin/reggin/">Reggin</a></li>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Frenin</title>
+    </head>
+    <body style="background-color:cyan">
+{% if status %}
 <li><a href="/frenin/regout/">Regout</a></li>
-<li><a href="/frenin/check/">Roll My Matches</a></li>
-<li><a href="/frenin/d3/">D3</a></li>
+{% else %}
+<li><a href="/frenin/reggin/">Reggin</a></li>
+{% endif %}
+<li><a href="/frenin/status/">Status</a></li>
+<li><a href="/frenin/check/">Graph My Last Match</a></li>
+    </body>
+</html>

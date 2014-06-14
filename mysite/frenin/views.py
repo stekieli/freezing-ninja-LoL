@@ -47,8 +47,10 @@ def reggin(request):
                 userr.set_password(password)
                 userr.save()
                 registered=True
+                userp = authenticate(username=username, password=password)
+                login(request,userp)
                 '''return render_to_response('rango/register.html',{'user_form': user_form,'registered': registered},context)'''
-                return HttpResponse("User Registered")
+                return HttpResponseRedirect('/frenin/')
 
             else:
                 print user_form.errors
@@ -66,9 +68,20 @@ def reggin(request):
         #return render_to_response('rango/reggin.html', {}, context)
         #return render(request, 'polls/reggin.html', context)
 
+def status(request):
+    if request.user.is_authenticated():
+        return HttpResponse('You are logged in as '+request.user.username)
+        
+    else:
+        return HttpResponse("You are not logged in.")
+
 def check_matches(request):
     if request.user.is_authenticated():
-        return HttpResponse("You are logged in.")
+        fr=freninhelper(request.user.username)
+        fr.getMatches()
+        fr.saveMatches(fr.mrow,'data.csv')
+        return render(request,'frenin/index.html')
+        
     else:
         return HttpResponse("You are not logged in.")
         #fre_id=freninhelper('Crides').getId()
@@ -78,13 +91,23 @@ def check_matches(request):
 def check_matches(request):
     return HttpResponse("Since you're logged in, you can see this text!")
 '''
+
 def d3view(request):
     #return HttpResponse("d3")
-    return render(request,'frenin/index.html',[1,2,3,4,5,6])
+    return render(request,'frenin/index.html')
 
 def regout(request):
     logout(request)
     return HttpResponseRedirect('/frenin/')
 
 def home(request):
-    return render(request,'frenin/home.html')
+    if request.user.is_authenticated():
+        #return HttpResponse('You are logged in as '+request.user.username)
+        print "show regout"
+        status=True
+    else:
+        #return HttpResponse("You are not logged in.")
+        print "show reggin"
+        status=False
+    
+    return render(request,'frenin/home.html',{'status':status})
